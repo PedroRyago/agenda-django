@@ -17,11 +17,15 @@ from django.contrib import admin
 from django.urls import path, include
 # from agenda.views import index
 from django.views.generic import RedirectView
+from agenda.views import user_login, user_logout, submit_login
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('agenda/', include('agenda.urls'), name='agenda'),
     path('', RedirectView.as_view(url='/agenda/')),
+    path('login/', user_login, name='login'),
+    path('login/submit', submit_login, name='login'),
+    path('logout/', user_logout, name='logout'),
     # path('', index, name='index'),
 ]
