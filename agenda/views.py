@@ -3,6 +3,9 @@ from django.shortcuts import render, redirect
 from .models import Evento
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
+from datetime import datetime, timedelta
+from django.http.response import Http404, JsonResponse
+from django.contrib.auth.models import User
 # Create your views here.
 
 # def index(request):
@@ -10,9 +13,10 @@ from django.contrib.auth import authenticate, login, logout
 
 @login_required(login_url='/login/')
 def listarEventos(request):
+    data_atual = datetime.now() - timedelta(hours=1)
     usuario = request.user
     title = 'Agenda'
-    eventos = Evento.objects.filter(usuario=usuario)
+    eventos = Evento.objects.filter(usuario=usuario, data_evento__gt=data_atual)
     dados = {'eventos': eventos, 'title': title}
     return render(request, 'agenda/listar.html', dados)
 
@@ -79,8 +83,14 @@ def delete_evento(request, id_evento):
         else:
             messages.error(request, 'Você não tem permissão para excluir este evento.')
     except Exception:
-        messages.error(request, 'Evento não encontrado.')
+        raise Http404()
     return redirect('/')
+
+# @login_required(login_url='/login/')
+def JsonListaEventos(request, id_usuario):
+    usuario = User.objects.get(id=id_usuario)
+    eventos = Evento.objects.filter(usuario=usuario).values('id', 'titulo')
+    return JsonResponse(list(eventos), safe=False)
 
 # def update_evento(request, id_evento):
 #     usuario = request.user
