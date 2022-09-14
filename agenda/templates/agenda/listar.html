@@ -5,13 +5,40 @@
     {% endblock title %}
     
     {% block content %}
+
+    
+
+
         <h1>Eventos</h1>
         <a href="evento/">
             <button type="button">Novo evento</button>
         </a>
-        <ul>
+        </br>
+        </br>
+        <table>
+            <tr>
+              <th>Título</th>
+              <th>Descrição</th>
+              <th>Data</th>
+              <th>ALTERAR</th>
+              <th>EXCLUIR</th>
+            </tr>
             {% for evento in eventos %}
-                <li style="font-size: 20px;">{{evento.titulo}} - {{evento.descricao}} - {{evento.get_data_evento}}</li>
+                <tr>
+                <td>{{evento.titulo}}</td>
+                <td>{{evento.descricao}} </td>
+                <td>{{evento.get_data_evento}}</td>
+                <td><a href="evento/?id= {{ evento.id }}">Alterar</a></td>
+                <td><a href="{% url 'delete_evento' evento.id %}">Excluir</a></td>
+                </tr>
             {% endfor %}
-        </ul>
+          </table>
+
+        
+        {% for message in messages %}                
+            <span style="color: red;"> ERRO: {{ message }}   </span>             
+        {% endfor %}
+    
     {% endblock %}
+
+    

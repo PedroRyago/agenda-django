@@ -3,7 +3,7 @@ from .models import Evento
 # Register your models here.
 
 class EventoAdmin(admin.ModelAdmin):
-    list_display = ('usuario', 'titulo', 'data_evento', 'data_criacao')
+    list_display = ('id', 'usuario', 'titulo', 'data_evento', 'data_criacao')
     list_filter = ('titulo', 'usuario',)
 
 admin.site.register(Evento, EventoAdmin)
